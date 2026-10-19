@@ -17,4 +17,9 @@ public class CajaAhorro extends Cuenta {
         }
         saldo = saldo.subtract(monto);
     }
+
+    @Override
+    public TipoCuenta getTipo() {
+        return TipoCuenta.CAJA_AHORRO;
+    }
 }

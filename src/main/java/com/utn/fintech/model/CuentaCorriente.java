@@ -20,6 +20,10 @@ public class CuentaCorriente extends Cuenta {
     public CuentaCorriente(BigDecimal limiteDescubierto) {
         this.limiteDescubierto = limiteDescubierto != null ? limiteDescubierto : BigDecimal.ZERO;
     }
+    @Override
+    public TipoCuenta getTipo() {
+        return TipoCuenta.CUENTA_CORRIENTE;
+    }
 
     @Override
     public void extraer(BigDecimal monto) {

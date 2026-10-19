@@ -34,6 +34,8 @@ public abstract class Cuenta implements Operable {
         }
     }
 
+    public abstract TipoCuenta getTipo();
+
     // Getters y setters
     public Long getId() { return id; }
     public String getNumero() { return numero; }

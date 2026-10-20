@@ -6,12 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 404: el recurso pedido no existe
     @ExceptionHandler({CuentaNoEncontradaException.class, UsuarioNoEncontradoException.class})
@@ -46,9 +51,22 @@ public class GlobalExceptionHandler {
         return construir(HttpStatus.BAD_REQUEST, ex.getMessage(), List.of());
     }
 
+    // 404: la ruta pedida no existe
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleRutaInexistente(NoResourceFoundException ex) {
+        return construir(HttpStatus.NOT_FOUND, "La ruta solicitada no existe", List.of());
+    }
+
+    // 400: body ausente o JSON mal formado
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleBodyInvalido(HttpMessageNotReadableException ex) {
+        return construir(HttpStatus.BAD_REQUEST, "El cuerpo de la petición falta o no es un JSON válido", List.of());
+    }
+
     // 500: cualquier otro error no previsto
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenerico(Exception ex) {
+        log.error("Error no controlado", ex); // queda registrado en la consola con todo el detalle
         return construir(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor", List.of());
     }
 

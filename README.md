@@ -227,7 +227,7 @@ Tests unitarios con **JUnit 5** y **Mockito**, sin dependencias externas (no req
 ```powershell
 .\mvnw.cmd test
 ```
-
+![Resultado de los tests en IntelliJ: 25 tests pasados](docs/tests.png)
 ---
 
 ## Decisiones técnicas
